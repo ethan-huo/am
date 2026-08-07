@@ -64,14 +64,16 @@ intersection, which is where a generic recommender lands.
 
 ## Anti-Patterns
 
-| Don't do this                                       | Do this instead                                 | Why                                                                      |
-| --------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------ |
-| Write a track from a title-only search hit          | Check `artist` on the result first              | Covers and remixes share titles; the wrong edition lands silently        |
-| Read an empty `results: []` as "not on Apple Music" | Check `$hints`, and retry with a different term | Regional catalogs differ — a track can be absent in one storefront only  |
-| Run `auth.refresh` preemptively                     | Just run the command; refresh is automatic      | Credentials refresh on expiry and on 401                                 |
-| Retry immediately after `rate_limited`              | Wait — the window is rolling and ~60 minutes    | Retrying extends the window rather than clearing it                      |
-| Recommend from your own memory of the user's taste  | Run `am taste` first                            | Play counts contradict self-reported taste more often than they confirm  |
-| Ask the user to open a browser for auth             | Just run the command                            | `am` drives Aside itself; a browser is only needed if the session is out |
+| Don't do this                                           | Do this instead                                 | Why                                                                           |
+| ------------------------------------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------- |
+| Write a track from a title-only search hit              | Check `artist` on the result first              | Covers and remixes share titles; the wrong edition lands silently             |
+| Read an empty `results: []` as "not on Apple Music"     | Check `$hints`, and retry with a different term | Regional catalogs differ — a track can be absent in one storefront only       |
+| Run `auth.refresh` preemptively                         | Just run the command; refresh is automatic      | Credentials refresh on expiry and on 401                                      |
+| Retry immediately after `rate_limited`                  | Wait — the window is rolling and ~60 minutes    | Retrying extends the window rather than clearing it                           |
+| Recommend from your own memory of the user's taste      | Run `am taste` first                            | Play counts contradict self-reported taste more often than they confirm       |
+| Ask the user to open a browser for auth                 | Just run the command                            | `am` drives Aside itself; a browser is only needed if the session is out      |
+| Read a `500 Upstream Service Error` as Apple being down | Re-check the catalog IDs you passed             | An ID that doesn't exist returns 500, not 404 — usually a typo, not an outage |
+| Retype a catalog ID by hand                             | Copy it verbatim from the `am search` output    | IDs are 10 digits with no checksum; a wrong one fails as an opaque 500        |
 
 ## Requirements
 
