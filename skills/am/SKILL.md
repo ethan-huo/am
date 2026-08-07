@@ -75,11 +75,10 @@ intersection, which is where a generic recommender lands.
 
 ## Requirements
 
-macOS with Music.app and an Apple Music subscription. Credentials come from
-[Aside](https://aside.com)'s logged-in Chrome profile and live in the login
-keychain; `am` fetches them on demand. The only unautomatable failure is a
-signed-out Apple session — `am` reports `signed_out` and tells the user where
-to sign in.
+macOS with Music.app and an Apple Music subscription. Credentials come from the
+Aside browser's logged-in profile and live in the login keychain; `am` fetches
+them on demand. The only unautomatable failure is a signed-out Apple session —
+`am` reports `signed_out` and tells the user where to sign in.
 
 ## Self-Improvement
 

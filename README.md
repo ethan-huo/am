@@ -25,9 +25,14 @@ It deliberately ships **no recommendation logic**. That's the caller's job.
 curl -fsSL https://raw.githubusercontent.com/ethan-huo/am/main/install.sh | sh
 ```
 
-Requires macOS, an Apple Music subscription, and
-[Aside](https://aside.com) signed in to Apple Music. Credentials are read on
-demand and stored in your login keychain — there is no login step to run.
+Requires macOS, an Apple Music subscription, and the Aside browser signed in to
+Apple Music. Credentials are read on demand and stored in your login keychain —
+there is no login step to run.
+
+**Aside is a hard dependency**, and the only path to credentials: `am` reads
+MusicKit's tokens out of a signed-in `music.apple.com` page. Without it, nothing
+that touches the catalog or your playlists will work. Local playback and
+`am taste` are AppleScript-only and work regardless.
 
 ## Usage
 
