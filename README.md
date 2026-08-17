@@ -36,8 +36,9 @@ that touches the catalog or your playlists will work. Local playback and
 
 ## Usage
 
-`am @schema` prints the full typed command surface. For agents, install the
-skill in `skills/am/`.
+`am @schema` prints the full typed command surface. For agents, `am @skill`
+prints the usage guide (`src/SKILL.md`); `skills/am/SKILL.md` is the harness
+stub.
 
 ## License
 

@@ -8,6 +8,7 @@ import packageJson from "../package.json" with { type: "json" };
 import * as api from "./api.ts";
 import { clearKeychain, getTokens, peek, refresh } from "./auth.ts";
 import * as local from "./local.ts";
+import { embedSkill } from "./skill.embed.ts" with { type: "macro" };
 
 const s = toStandardJsonSchema;
 
@@ -113,6 +114,7 @@ const app = cli(schema, {
   name: "am",
   version: packageJson.version,
   description: "Control Apple Music and read your listening history",
+  skill: embedSkill(),
 });
 
 await app.run({
