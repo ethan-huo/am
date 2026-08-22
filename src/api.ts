@@ -1,4 +1,4 @@
-import { domainError } from "argc";
+import { domainError } from "@celados/argc";
 
 import { getTokens, refresh, type Tokens } from "./auth.ts";
 

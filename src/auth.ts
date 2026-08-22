@@ -1,5 +1,5 @@
 import { $ } from "bun";
-import { domainError } from "argc";
+import { domainError } from "@celados/argc";
 
 const SERVICE = "am-apple-music";
 const ACCOUNT = "am";

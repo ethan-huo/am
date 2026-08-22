@@ -1,5 +1,5 @@
 import { $ } from "bun";
-import { domainError } from "argc";
+import { domainError } from "@celados/argc";
 
 /**
  * Local Music.app control via AppleScript/JXA.
