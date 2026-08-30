@@ -4,7 +4,7 @@ An agent-native CLI built with [argc](https://github.com/ethan-huo/argc) on Bun.
 
 - **Building this tool** — use the `argc` skill. It owns the schema design,
   handler, stdout, and release conventions; don't restate them here.
-- **Using this tool** — `src/SKILL.md` is the source of truth, served by
+- **Using this tool** — `src/index.md` is the source of truth, served by
   `am @skill`. `skills/am/SKILL.md` is the harness stub (intent matching
   and immediate `@skill` routing; its body is only a fallback).
 - **Releasing this tool** — use `.agents/skills/release/SKILL.md`; release is a
