@@ -1,41 +1,16 @@
-// Runs inside `aside repl`. Opens a background music.apple.com tab in the user's
-// logged-in Chrome profile, reads MusicKit's tokens, and prints them as JSON.
+// Runs inside `aside repl`. Opens a music.apple.com tab in the user's logged-in
+// Chrome profile, reads MusicKit's tokens, and prints them as JSON.
 //
 // This is the ONLY step that needs a browser. Everything else in `am` is plain HTTP.
-// Validated 2026-08-06: ~1.35s end to end, tab never steals foreground focus.
+//
+// Tab lifecycle must go through openTab()/closeTab(): Aside exposes chrome.tabs as
+// inspection-only, so creating or navigating a tab through it is a hard permission
+// error, not a silent no-op.
 
-const AGENT_NAME = "Claude Code";
-const marker = `about:blank#am-token-${Date.now()}`;
-
-const groups = await chrome.tabGroups.query({ title: AGENT_NAME });
-const existing = groups[0];
-const tab = await chrome.tabs.create({
-  url: marker,
-  active: false,
-  ...(existing ? { windowId: existing.windowId } : {}),
-});
-const groupId = await chrome.tabs.group(
-  existing
-    ? { tabIds: tab.id, groupId: existing.id }
-    : { tabIds: tab.id, createProperties: { windowId: tab.windowId } },
-);
-if (!existing) await chrome.tabGroups.update(groupId, { title: AGENT_NAME, color: "blue" });
-
-let target;
-for (let i = 0; i < 20 && !target; i++) {
-  target = (await listBrowserTabs()).find((t) => t.url === marker);
-  if (!target) await sleep(50);
-}
-if (!target) {
-  await chrome.tabs.remove(tab.id);
-  throw new Error("tab never appeared in browser target list");
-}
+page = await openTab("https://music.apple.com/cn/browse");
 
 let result = null;
 try {
-  await chrome.tabs.update(tab.id, { url: "https://music.apple.com/cn/browse" });
-  await attachBrowserTab(target.targetId);
-
   // MusicKit boots asynchronously — poll instead of guessing a sleep duration.
   for (let i = 0; i < 30 && !result; i++) {
     result = await page.evaluate(() => {
@@ -64,7 +39,7 @@ try {
 } finally {
   // Best-effort: a lost ack may still have closed the tab, so never fail on this.
   try {
-    await chrome.tabs.remove(tab.id);
+    await closeTab(page);
   } catch {}
 }
 

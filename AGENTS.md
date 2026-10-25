@@ -29,6 +29,10 @@ Non-obvious constraints, each one paid for:
   without it. In-page calls get it for free, so this only bites from a CLI.
 - **`musicUserToken` is opaque**, not a JWT — its lifetime is unknowable, so any
   401/403 means refresh _both_ tokens.
+- **Aside's `chrome.tabs` is inspection-only.** Refresh must create its tab with
+  `openTab()`/`closeTab()`; `chrome.tabs.create` fails with a hard permission
+  error, which surfaces as `token_not_found` because the script dies before it
+  reads MusicKit.
 - **AppleScript cannot add catalog tracks** to anything (`add` takes local files
   only), the Up Next queue is not exposed, and only the client that created a
   playlist may edit it. Hence all writes go through amp-api.
