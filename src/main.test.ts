@@ -4,7 +4,12 @@ import { join } from "node:path";
 const ENTRY = join(import.meta.dir, "main.ts");
 
 async function run(...args: string[]) {
-  const proc = Bun.spawn(["bun", "run", ENTRY, ...args], { stderr: "pipe" });
+  const proc = Bun.spawn(["bun", "run", ENTRY, ...args], {
+    stderr: "pipe",
+    // Bun.spawn defaults to the launch-time environ; pass the preloaded
+    // process.env so the argc test-preload's stripped agent vars reach the child.
+    env: { ...process.env },
+  });
   const [stdout, stderr, exitCode] = await Promise.all([
     new Response(proc.stdout).text(),
     new Response(proc.stderr).text(),
