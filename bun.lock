@@ -5,7 +5,7 @@
     "": {
       "name": "am",
       "dependencies": {
-        "@celados/argc": "^8.0.0",
+        "@celados/argc": "^9.0.0",
         "@valibot/to-json-schema": "^1.7.0",
         "valibot": "^1.4.1",
         "yaml": "^2.9.0",
@@ -18,7 +18,7 @@
     },
   },
   "packages": {
-    "@celados/argc": ["@celados/argc@8.0.0", "https://npm.celados.com/@celados/argc/-/@celados/argc-8.0.0.tgz", { "dependencies": { "yaml": "2.9.0" }, "peerDependencies": { "@standard-schema/spec": "^1.0.0" } }, "sha512-xVY1Dqta6Z5Fhx2QpDC4udfkC6903YOniosf0clmd034+Cvn56G968RIElW6n7BXw/oVTBBZTT+HnQInxImRtw=="],
+    "@celados/argc": ["@celados/argc@9.0.0", "https://npm.celados.com/@celados/argc/-/@celados/argc-9.0.0.tgz", { "dependencies": { "yaml": "2.9.0" }, "peerDependencies": { "@standard-schema/spec": "^1.0.0" } }, "sha512-shfwtc+ZAyXBxtxPnG3CapcUL0c7sUJu+pbcQAe5e190lVmtyRBCG1+OCVLn9UgKvTx2g0x7fFlu9Y7jR6LPnQ=="],
 
     "@oxfmt/binding-android-arm-eabi": ["@oxfmt/binding-android-arm-eabi@0.53.0", "", { "os": "android", "cpu": "arm" }, "sha512-XfVM8AmIovBTKXCt14Op5wbfcoM8418nttd+nhMgM3RAVaJg1MtJc73FyWfUt0oxLyBGVwfniNVUsbV/b3VmPg=="],
 
