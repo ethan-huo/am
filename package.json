@@ -1,6 +1,6 @@
 {
   "name": "am",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Describe what am does in one line.",
   "bin": {
     "am": "./src/main.ts"
@@ -17,7 +17,7 @@
     "build": "bun build src/main.ts --outfile=dist/am --target=bun --minify && chmod +x dist/am"
   },
   "dependencies": {
-    "@celados/argc": "^8.0.0",
+    "@celados/argc": "^9.0.0",
     "@valibot/to-json-schema": "^1.7.0",
     "valibot": "^1.4.1",
     "yaml": "^2.9.0"
