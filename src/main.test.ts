@@ -23,15 +23,15 @@ async function run(...args: string[]) {
 test("@schema exposes the full command surface", async () => {
   const { stdout, stderr, exitCode } = await run("@schema");
   expect(exitCode, stderr).toBe(0);
-  // Groups render as nested TypeScript, so assert on the shape agents read.
+  // Flat Markdown: one `### <path>` block per command.
   for (const fragment of [
-    "search(input: {",
-    "taste(input: {",
-    "play(input: {",
-    "playlist: {",
-    "create(input: {",
-    "auth: {",
-    "status()",
+    "### search",
+    "### taste",
+    "### play",
+    "### playlist.*",
+    "### playlist.create",
+    "### auth.*",
+    "### auth.status",
   ]) {
     expect(stdout).toContain(fragment);
   }

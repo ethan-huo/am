@@ -22,11 +22,6 @@ const schema = {
   search: c
     .meta({
       description: "Search the Apple Music catalog",
-      examples: [
-        // ISRC is the point: title-only matching silently returns covers and
-        // remixes, so callers should pin the edition before writing anything.
-        `am search "{ term: 'nujabes aruarian dance', limit: 3 }"`,
-      ],
     })
     .positional("term")
     .input(
