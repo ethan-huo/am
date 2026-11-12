@@ -1,79 +1,29 @@
 # am
 
-`am` gives you Apple Music's catalog, the user's library, and playback control
-as plain commands. It is a set of primitives, **not a recommender** — the taste
-judgment is yours. `am taste` hands you the evidence; you decide what to
-suggest, then `am playlist.create` writes it back.
+Apple Music's catalog, the user's library and Music.app playback as plain commands. It is a set of primitives, not a recommender: taste judgment is yours. `am taste` is the evidence, `am playlist.create` writes your answer back. Needs macOS, Music.app and a subscription; credentials come from the Aside browser's signed-in profile and refresh on their own.
 
-Do not use `am` to reason about music you cannot verify exists: every track you
-put in a playlist must come from a real `am search` result.
+Read the section for your task, then only that slice: `am @schema .playlist`, or several at once with `am @schema '.{taste,search}'`.
 
-## Discover Capabilities First
+## Recommending — .{taste,search,playlist}
 
-```bash
-am @schema              # full typed spec
-```
+- Start from `am taste`, never from your memory of the user's taste: play counts contradict self-reported taste more often than they confirm it. Look for clusters, not one average. A library that splits into non-overlapping groups is where collaborative filtering fails and you add value, so recommend into each cluster rather than to their intersection.
+- Every track you write must come from a real `am search` result; don't reason about music you cannot verify exists. Copy the catalog ID verbatim from the output: IDs have no checksum and a wrong one fails as an opaque `500 Upstream Service Error` (an ID that doesn't exist returns 500, not 404, so it means a typo and not an outage).
+- Check `artist` on the hit before trusting it. Title-only matches surface covers, remixes and piano tributes, and the wrong edition lands silently.
+- Empty `results: []` is not "not on Apple Music": regional catalogs differ. Read `$hints` and retry with another term.
+- `playlist.create` seeds its tracks in the same request, so there is no "add to library first" step.
 
-## Command Reference
+## Playback — .{play,now,control}
 
-| Command                             | What it does                       | When to use                       |
-| ----------------------------------- | ---------------------------------- | --------------------------------- |
-| `am taste`                          | Play counts by artist and track    | Before recommending anything      |
-| `am search`                         | Catalog search, returns IDs + ISRC | To resolve any track you'll write |
-| `am playlist.create` / `.add`       | Write a playlist from catalog IDs  | To deliver a recommendation       |
-| `am playlist.list` / `.tracks`      | Read existing playlists            | To extend or inspect              |
-| `am play` / `am now` / `am control` | Local Music.app playback           | To actually start listening       |
-| `am auth.status` / `.refresh`       | Credentials                        | Only when something 401s          |
+Local Music.app only: Apple Music has no remote-playback endpoint.
 
-## Core Workflow
+## Credentials — .auth
 
-Recommending music is always the same three steps:
+Run the command you wanted; refresh is automatic on expiry and on 401, so don't run `auth.refresh` preemptively, and don't ask the user to open a browser (`am` drives Aside itself). Only a signed-out Apple session can't be automated: `am` reports `signed_out` and says where to sign in.
 
-```bash
-# 1. Read the evidence — this is the signal Apple's own recommender ignores
-am taste "{ artists: 20, tracks: 25 }"
+## Rate limits
 
-# 2. Resolve every candidate. Check the artist field before trusting a hit:
-#    title-only matches surface covers, remixes and piano tributes.
-am search "{ term: 'nujabes aruarian dance', limit: 5 }"
+After `rate_limited`, wait: the window is rolling and about 60 minutes, and retrying extends it.
 
-# 3. Write it, then play it
-am playlist.create "{ name: '...', tracks: ['1721843001', '1078914488'] }"
-am play "am 选曲"
-```
+## Friction
 
-`playlist.create` seeds tracks in the same request — there is no separate
-"add to library first" step.
-
-## Reading `am taste`
-
-Look for _clusters_, not a single average. A library that splits into several
-non-overlapping groups is exactly where collaborative filtering fails and you
-add value: recommend into each cluster separately rather than to their
-intersection, which is where a generic recommender lands.
-
-## Anti-Patterns
-
-| Don't do this                                           | Do this instead                                 | Why                                                                           |
-| ------------------------------------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------- |
-| Write a track from a title-only search hit              | Check `artist` on the result first              | Covers and remixes share titles; the wrong edition lands silently             |
-| Read an empty `results: []` as "not on Apple Music"     | Check `$hints`, and retry with a different term | Regional catalogs differ — a track can be absent in one storefront only       |
-| Run `auth.refresh` preemptively                         | Just run the command; refresh is automatic      | Credentials refresh on expiry and on 401                                      |
-| Retry immediately after `rate_limited`                  | Wait — the window is rolling and ~60 minutes    | Retrying extends the window rather than clearing it                           |
-| Recommend from your own memory of the user's taste      | Run `am taste` first                            | Play counts contradict self-reported taste more often than they confirm       |
-| Ask the user to open a browser for auth                 | Just run the command                            | `am` drives Aside itself; a browser is only needed if the session is out      |
-| Read a `500 Upstream Service Error` as Apple being down | Re-check the catalog IDs you passed             | An ID that doesn't exist returns 500, not 404 — usually a typo, not an outage |
-| Retype a catalog ID by hand                             | Copy it verbatim from the `am search` output    | IDs are 10 digits with no checksum; a wrong one fails as an opaque 500        |
-
-## Requirements
-
-macOS with Music.app and an Apple Music subscription. Credentials come from the
-Aside browser's logged-in profile and live in the login keychain; `am` fetches
-them on demand. The only unautomatable failure is a signed-out Apple session —
-`am` reports `signed_out` and tells the user where to sign in.
-
-## Self-Improvement
-
-When you encounter friction — a command that doesn't behave as documented, a
-misleading instruction in this skill, or confusing output — file a GitHub
-issue against `ethan-huo/am` instead of silently working around it.
+When a command misbehaves against this guide or its output misleads, file a GitHub issue on `ethan-huo/am` instead of silently working around it.
