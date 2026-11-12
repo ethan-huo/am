@@ -54,3 +54,19 @@ bun run src/main.ts play "{ playlist: 'am E2E' }"
 bun run src/main.ts now "{}"      # must show artist/name, not a bare state
 bun run src/main.ts taste "{}"
 ```
+
+## Local install after every change
+
+On the user's machines `am` is the release bundle in `~/.local/bin`,
+installed by the workspace `update-local-tool` skill. A change is not done when
+it merges or releases. It is done when the user's local `am` runs it. The
+user does not watch for this, so do it without being asked:
+
+1. After the release workflow for your change succeeds, check whether the tool is
+   installed: `command -v am`. If it is not, stop here.
+2. Run `bash ~/workspace/.agents/skills/update-local-tool/update.sh am`. It prints `before -> after`.
+3. Check your change with the installed binary, for example `am @schema` or the
+   command you changed.
+4. Put the `before -> after` line in your final report.
+
+If the release failed, report that. Don't install a local build in its place.
