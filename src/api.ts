@@ -41,10 +41,7 @@ async function once(
  * The user token is opaque, so its lifetime is unknowable up front — an auth
  * failure is the only signal that it died, and it invalidates both tokens.
  */
-export async function call<T>(
-	path: string,
-	opts: RequestOptions = {},
-): Promise<T> {
+async function call<T>(path: string, opts: RequestOptions = {}): Promise<T> {
 	let tokens = await getTokens()
 	let res = await once(tokens, path, opts)
 

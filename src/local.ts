@@ -1,5 +1,4 @@
 import { domainError } from '@celados/argc'
-import { $ } from 'bun'
 
 /**
  * Local Music.app control via AppleScript/JXA.
@@ -95,7 +94,7 @@ async function applescript(source: string): Promise<string> {
 	return out.trim()
 }
 
-export async function playlistExists(name: string): Promise<boolean> {
+async function playlistExists(name: string): Promise<boolean> {
 	const out = await applescript(
 		`tell application "Music" to return (exists user playlist ${JSON.stringify(name)})`,
 	)
