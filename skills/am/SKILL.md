@@ -1,5 +1,5 @@
 ---
-name: "am"
+name: 'am'
 description: >-
   When the user wants Apple Music recommendations, listening-history or taste
   insight, playlist creation, catalog search, or local playback control, run
